@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Турнир по Standoff 2 — регистрация команд</title>
+<meta name="description" content="Открытый турнир по Standoff 2: 16 команд, призовой фонд 42 000 голды. Выберите свободное место в команде и оставьте заявку.">
+<meta name="theme-color" content="#f5f7fa">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233461d1'/%3E%3Cpath d='M20 44V20h14a8 8 0 010 16H26' fill='none' stroke='white' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f7fa; --surface:#ffffff; --surface2:#eef2f7;
+  --ink:#1d2733; --muted:#6a7685; --line:#dde3ec;
+  --accent:#3461d1; --accent-soft:#e6edfc; --accent-ink:#ffffff;
+  --ok:#2e8b57; --ok-soft:#e4f4ea; --taken:#c3cad5;
+  --danger:#c0392b; --shadow:0 1px 2px rgba(29,39,51,.05),0 8px 24px rgba(29,39,51,.06);
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#12171e; --surface:#1a212b; --surface2:#222b37;
+    --ink:#e8edf3; --muted:#97a3b2; --line:#2b3644;
+    --accent:#7a9bf0; --accent-soft:#232f4a; --accent-ink:#0f1624;
+    --ok:#5ec28a; --ok-soft:#1f3a2c; --taken:#3a4555;
+    --danger:#ef7d6f; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+.sky{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(180deg,#eaf4fd 0%,var(--bg) 60%)}
+.sky i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
+.sky i:nth-child(1){width:46vmax;height:46vmax;left:-12vmax;top:-14vmax;background:#bfe0fb;animation:fl1 26s ease-in-out infinite alternate}
+.sky i:nth-child(2){width:38vmax;height:38vmax;right:-10vmax;top:12vh;background:#cfe9ff;animation:fl2 32s ease-in-out infinite alternate}
+.sky i:nth-child(3){width:34vmax;height:34vmax;left:25vw;bottom:-16vmax;background:#d9ecfb;animation:fl3 38s ease-in-out infinite alternate}
+@keyframes fl1{to{transform:translate(14vmax,10vmax) scale(1.12)}}
+@keyframes fl2{to{transform:translate(-12vmax,14vmax) scale(.92)}}
+@keyframes fl3{to{transform:translate(-10vmax,-9vmax) scale(1.15)}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sky{background:linear-gradient(180deg,#14202e 0%,var(--bg) 60%)}:root:not([data-theme="light"]) .sky i{opacity:.28;background:#2f5f8f}}
+body{font-family:Onest,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:transparent;color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink)}
+.brand i{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center}
+.brand svg{width:18px;height:18px}
+nav{display:flex;gap:6px}
+nav a{color:var(--muted);font-weight:500;font-size:15px;padding:8px 12px;border-radius:10px;transition:.2s}
+nav a:hover{background:var(--surface2);color:var(--ink);text-decoration:none}
+
+/* hero */
+.hero{padding:64px 0 40px;display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:8px;background:var(--ok-soft);color:var(--ok);font-weight:600;font-size:14px;padding:6px 12px;border-radius:999px}
+.tag svg{width:16px;height:16px}
+h1{font-size:clamp(34px,5vw,56px);line-height:1.08;letter-spacing:-.02em;margin:18px 0 16px;font-weight:700}
+.lead{color:var(--muted);font-size:18px;max-width:520px}
+.cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;font-size:16px;padding:13px 22px;border-radius:12px;border:1px solid transparent;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 30%,transparent);text-decoration:none}
+.btn.ghost{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.btn.ghost:hover{background:var(--surface2);text-decoration:none}
+.prize{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:var(--shadow)}
+.prize small{color:var(--muted);font-weight:500}
+.prize b{display:block;font-size:clamp(40px,5vw,60px);letter-spacing:-.02em;line-height:1.1;margin:6px 0 2px;color:var(--accent)}
+.prize span{font-weight:600}
+.prize hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+.org{display:grid;gap:12px;font-size:15px}
+.org div{display:flex;justify-content:space-between;gap:12px}
+.org em{font-style:normal;color:var(--muted)}
+
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.fact b{display:block;font-size:30px;letter-spacing:-.02em}
+.fact span{color:var(--muted);font-size:14px}
+
+/* sections */
+section{padding:56px 0 8px}
+h2{font-size:clamp(26px,3.4vw,36px);letter-spacing:-.015em;margin-bottom:8px}
+.sub{color:var(--muted);max-width:640px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:20px 0 14px;font-size:14px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.dot{width:14px;height:14px;border-radius:50%;display:inline-block}
+.dot.free{border:2px solid var(--accent);background:var(--accent-soft)}
+.dot.taken{background:var(--taken)}
+.dot.sent{background:var(--ok)}
+
+/* bracket */
+.scroller{overflow-x:auto;padding:6px 2px 18px;-webkit-overflow-scrolling:touch}
+.inner{min-width:1150px}
+.heads,.bracket{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:26px}
+.heads{margin-bottom:10px}
+.heads h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center}
+.bracket{position:relative;align-items:stretch}
+.bracket #lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.bracket path{fill:none;stroke:var(--line);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bracket path.draw{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.1s ease}
+.bracket.in path.draw{stroke-dashoffset:0}
+.col{display:flex;flex-direction:column;justify-content:space-around;gap:14px}
+.col.center{justify-content:center}
+.team{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px;box-shadow:var(--shadow);transition:transform .2s,border-color .2s}
+.team:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.team .nm{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:600;font-size:15px}
+.team .nm small{font-weight:500;color:var(--muted);font-size:12px;white-space:nowrap}
+.slots{display:flex;gap:5px;margin-top:9px}
+.slot{width:28px;height:28px;border-radius:50%;border:2px solid var(--taken);background:var(--taken);display:grid;place-items:center;padding:0;font:inherit;color:#fff;cursor:default}
+.slot svg{width:13px;height:13px}
+button.slot.free{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);cursor:pointer;font-size:17px;font-weight:600;line-height:1;transition:transform .15s,background .15s,color .15s}
+button.slot.free:hover{transform:scale(1.12);background:var(--accent);color:var(--accent-ink)}
+button.slot.free:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);outline-offset:2px}
+.slot.sent{background:var(--ok);border-color:var(--ok)}
+.tbd{border:1.5px dashed var(--line);border-radius:12px;min-height:44px;padding:14px 10px;text-align:center;color:var(--muted);font-size:13px;background:color-mix(in srgb,var(--surface) 60%,transparent)}
+.final{border:1.5px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600;border-style:solid}
+
+
+/* about */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.card h3{font-size:17px;margin-bottom:6px}
+.card p{color:var(--muted);font-size:15px}
+.card .ico{font-weight:700;font-size:18px;width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:14px}
+.card .ico svg{width:20px;height:20px}
+.partners{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:15px}
+.chip em{display:block;font-style:normal;color:var(--muted);font-size:12px}
+footer{margin-top:64px;border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* modal */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(20,28,38,.45);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.ov.open{opacity:1;visibility:visible}
+.modal{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.25);transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.ov.open .modal{transform:none}
+.modal h3{font-size:22px;letter-spacing:-.01em}
+.modal .meta{color:var(--muted);font-size:14px;margin:4px 0 18px}
+.x{float:right;background:none;border:0;color:var(--muted);font-size:26px;line-height:1;cursor:pointer;border-radius:8px;width:34px;height:34px}
+.x:hover{background:var(--surface2)}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:11px;border:1px solid var(--line);background:var(--bg);color:var(--ink);transition:border-color .2s,box-shadow .2s}
+input:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+input.bad{border-color:var(--danger)}
+.err{color:var(--danger);font-size:13px;min-height:18px;margin-top:4px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.modal .btn{width:100%;margin-top:18px}
+.btn[disabled]{opacity:.6;cursor:wait}
+.done{text-align:center;padding:14px 0 4px}
+.done .ok{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center}
+.done .ok svg{width:30px;height:30px}
+.done .ok path{stroke-dasharray:30;stroke-dashoffset:30;animation:dr .5s .15s ease forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+.done p{color:var(--muted);margin:6px 0 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:14px;opacity:0;transition:.3s;z-index:60;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* reveal */
+.js-anim .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+.js-anim .rv.in{opacity:1;transform:none}
+
+@media (max-width:860px){
+  .inner{min-width:0}
+  .heads,#lines,.col.mid{display:none}
+  .bracket{grid-template-columns:1fr 1fr;gap:10px}
+  .col.teams{gap:10px;justify-content:flex-start}
+  .team{padding:10px}
+  .team .nm{font-size:14px}
+  .slots{gap:4px}.slot{width:24px;height:24px}
+  .slot svg{width:11px;height:11px}
+  .scroller{overflow:visible}
+  .legend{gap:10px 16px}
+  section{padding-top:40px}
+  .hero{gap:24px}
+  .prize{padding:22px}
+  .hero{grid-template-columns:1fr;padding-top:40px}
+  .facts{grid-template-columns:repeat(2,1fr)}
+  .cards{grid-template-columns:1fr}
+  nav a:not(.keep){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .js-anim .rv{opacity:1;transform:none}
+  .bracket path.draw{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><i></i><i></i><i></i></div>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18V6h6a4 4 0 010 8h-4"/></svg></i>Standoff 2 · Турнир</a>
+    <nav><a href="#bracket">Сетка</a><a href="#about">О турнире</a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <div class="hero">
+      <div class="rv">
+        <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Турнир сертифицирован</span>
+        <h1>Турнир по Standoff 2</h1>
+        <p class="lead">Выберите свободное место в команде и оставьте заявку — организатор свяжется с вами в Telegram.</p>
+        <div class="cta">
+          <a class="btn primary" href="#bracket">Выбрать место</a>
+          
+        </div>
+      </div>
+      <aside class="prize rv">
+        <small>Призовой фонд</small>
+        <b>42 000</b>
+        <span>голды</span>
+        <hr>
+        <div class="org">
+          <div><em>Организатор</em><a href="https://t.me/adm1nistratorSO2" target="_blank" rel="noopener">@adm1nistratorSO2</a></div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="facts rv">
+      <div class="fact"><b>16</b><span>команд</span></div>
+      <div class="fact"><b>5</b><span>игроков в команде</span></div>
+      <div class="fact"><b>80</b><span>мест всего</span></div>
+      <div class="fact"><b id="freeCount">—</b><span>свободных мест</span></div>
+    </div>
+  </div>
+
+  <section id="bracket">
+    <div class="wrap">
+      <div class="rv">
+        <h2>Турнирная сетка</h2>
+        <p class="sub">Нажмите на свободное место в команде (кружок с плюсом), заполните короткую форму — и заявка уйдёт организатору.</p>
+        <div class="legend">
+          <span><i class="dot free"></i>Свободно</span>
+          <span><i class="dot taken"></i>Занято</span>
+          <span><i class="dot sent"></i>Ваша заявка отправлена</span>
+        </div>
+      </div>
+      <div class="scroller rv"><div class="inner"><div class="heads"><h3>1/8 финала</h3><h3>1/4 финала</h3><h3>Полуфинал</h3><h3>Финал</h3><h3>Полуфинал</h3><h3>1/4 финала</h3><h3>1/8 финала</h3></div><div class="bracket" id="bracketEl"><div class="col teams"><div class="team" id="t0"><div class="nm"><span>TSK</span><small>№1</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><button type="button" class="slot free" data-team="0" data-slot="5" aria-label="Свободное место 5 в команде TSK">+</button></div></div><div class="team" id="t1"><div class="nm"><span>Avis Flop</span><small>№2</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t2"><div class="nm"><span>Dark Star</span><small>№3</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t3"><div class="nm"><span>Yaske Team</span><small>№4</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t4"><div class="nm"><span>Jovix Team</span><small>№5</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t5"><div class="nm"><span>Rippers 7</span><small>№6</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t6"><div class="nm"><span>TJK</span><small>№7</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t7"><div class="nm"><span>Zekyua Squad</span><small>№8</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div></div><div class="col mid"><div class="tbd " id="bL0"></div><div class="tbd " id="bL1"></div><div class="tbd " id="bL2"></div><div class="tbd " id="bL3"></div></div><div class="col mid"><div class="tbd " id="cL0"></div><div class="tbd " id="cL1"></div></div><div class="col center mid"><div class="tbd final" id="fin">Финал</div></div><div class="col mid"><div class="tbd " id="cR0"></div><div class="tbd " id="cR1"></div></div><div class="col mid"><div class="tbd " id="bR0"></div><div class="tbd " id="bR1"></div><div class="tbd " id="bR2"></div><div class="tbd " id="bR3"></div></div><div class="col teams"><div class="team" id="t8"><div class="nm"><span>Squad-Onyx</span><small>№9</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t9"><div class="nm"><span>Immortal Squad</span><small>№10</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t10"><div class="nm"><span>Gox Team</span><small>№11</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t11"><div class="nm"><span>Hatyy Sqw</span><small>№12</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t12"><div class="nm"><span>BXT</span><small>№13</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t13"><div class="nm"><span>WO Team</span><small>№14</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t14"><div class="nm"><span>TBA 15</span><small>№15</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div><div class="team" id="t15"><div class="nm"><span>TBA 16</span><small>№16</small></div><div class="slots"><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="slot" title="Занято"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></div></div></div><svg id="lines" aria-hidden="true" viewBox="0 0 1196 795.25"></svg></div></div></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="rv"><h2>О турнире</h2><p class="sub">Как принять участие — три шага.</p></div>
+      <div class="cards">
+        <div class="card rv"><div class="ico">1</div><h3>Выберите место</h3><p>Найдите в сетке команду со свободным местом — кружок с плюсом.</p></div>
+        <div class="card rv"><div class="ico">2</div><h3>Заполните форму</h3><p>Игровой ник, игровой ID и Telegram — это займёт минуту.</p></div>
+        <div class="card rv"><div class="ico">3</div><h3>Дождитесь ответа</h3><p>Организатор подтвердит участие и напишет вам в Telegram.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="partners">
+    <div class="wrap">
+      <div class="rv"><h2>Спонсоры</h2></div>
+      <div class="partners rv">
+        <a class="chip" href="https://t.me/mellontyhub" target="_blank" rel="noopener">@mellontyhub</a>
+        <a class="chip" href="https://t.me/velyamedia" target="_blank" rel="noopener">@velyamedia</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>© <span id="yr"></span> Турнир по Standoff 2</span></div></footer>
+
+<div class="ov" id="ov" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <div id="formView">
+      <button class="x" id="closeBtn" type="button" aria-label="Закрыть">×</button>
+      <h3 id="mt">Заявка на участие</h3>
+      <p class="meta" id="mm"></p>
+      <form id="f" novalidate autocomplete="off">
+        <label for="nick">Игровой ник</label>
+        <input id="nick" name="nick" maxlength="24" placeholder="Например, Player123">
+        <div class="err" data-e="nick"></div>
+        <label for="gid">Игровой ID</label>
+        <input id="gid" name="gameId" inputmode="numeric" maxlength="12" placeholder="Только цифры">
+        <div class="err" data-e="gameId"></div>
+        <label for="tg">Telegram</label>
+        <input id="tg" name="telegram" maxlength="33" placeholder="@username">
+        <div class="err" data-e="telegram"></div>
+        <input class="hp" id="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn primary" id="sendBtn" type="submit">Отправить заявку</button>
+        <div class="err" id="formErr" style="text-align:center"></div>
+      </form>
+    </div>
+    <div class="done" id="doneView" hidden>
+      <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h3>Заявка отправлена</h3>
+      <p>Организатор свяжется с вами в Telegram.</p>
+      <button class="btn ghost" id="doneBtn" type="button" style="margin-top:18px">Закрыть</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  "use strict";
+  document.documentElement.classList.add("js-anim");
+  var SUBMIT_URL = "/api/send";
+  var LS_KEY = "tournament-sent-v1";
+
+  // Команды (в порядке сетки). filled — сколько мест из 5 уже занято.
+  var TEAMS = [
+    {n:"TSK",filled:4},{n:"Avis Flop",filled:5},{n:"Dark Star",filled:5},{n:"Yaske Team",filled:5},
+    {n:"Jovix Team",filled:5},{n:"Rippers 7",filled:5},{n:"TJK",filled:5},{n:"Zekyua Squad",filled:5},
+    {n:"Squad-Onyx",filled:5},{n:"Immortal Squad",filled:5},{n:"Gox Team",filled:5},{n:"Hatyy Sqw",filled:5},
+    {n:"BXT",filled:5},{n:"WO Team",filled:5},{n:"TBA 15",filled:5},{n:"TBA 16",filled:5}
+  ];
+  var SIZE = 5;
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+  function $(s,r){return (r||document).querySelector(s);}
+  function readSent(){try{return JSON.parse(localStorage.getItem(LS_KEY)||"[]");}catch(e){return [];}}
+  function saveSent(a){try{localStorage.setItem(LS_KEY,JSON.stringify(a));}catch(e){}}
+  var sent = readSent();
+  function key(t,s){return t+":"+s;}
+
+  /* ---------- сетка ---------- */
+  var el = $("#bracketEl");
+  function teamHTML(i){
+    var t = TEAMS[i], dots = "";
+    for(var s=1;s<=SIZE;s++){
+      if(s<=t.filled) dots += '<span class="slot" title="Занято">'+CHECK+'</span>';
+      else if(sent.indexOf(key(i,s))>-1) dots += '<span class="slot sent" title="Ваша заявка отправлена">'+CHECK+'</span>';
+      else dots += '<button type="button" class="slot free" data-team="'+i+'" data-slot="'+s+'" aria-label="Свободное место '+s+' в команде '+t.n+'">+</button>';
+    }
+    return '<div class="team" id="t'+i+'"><div class="nm"><span>'+t.n+'</span><small>№'+(i+1)+'</small></div><div class="slots">'+dots+'</div></div>';
+  }
+  function tbd(id,txt,extra){return '<div class="tbd '+(extra||"")+'" id="'+id+'">'+txt+'</div>';}
+  function col(title,inner,cls){return '<div class="col '+(cls||"")+'">'+inner+'</div>';}
+  function render(){
+    var L1="",R1="",i;
+    for(i=0;i<8;i++) L1+=teamHTML(i);
+    for(i=8;i<16;i++) R1+=teamHTML(i);
+    var html =
+      col("",L1,"teams")+
+      col("",tbd("bL0","")+tbd("bL1","")+tbd("bL2","")+tbd("bL3",""),"mid")+
+      col("",tbd("cL0","")+tbd("cL1",""),"mid")+
+      col("",tbd("fin","Финал","final"),"center mid")+
+      col("",tbd("cR0","")+tbd("cR1",""),"mid")+
+      col("",tbd("bR0","")+tbd("bR1","")+tbd("bR2","")+tbd("bR3",""),"mid")+
+      col("",R1,"teams");
+    el.innerHTML = html + '<svg id="lines" aria-hidden="true"></svg>';
+    updateFree();
+  }
+  function updateFree(){
+    var n=0;
+    for(var i=0;i<TEAMS.length;i++)for(var s=TEAMS[i].filled+1;s<=SIZE;s++)if(sent.indexOf(key(i,s))<0)n++;
+    $("#freeCount").textContent=n;
+  }
+
+  // линии: [откуда(ids), куда, сторона]
+  var LINKS = [
+    [["t0"],"bL0","r"],[["t1"],"bL0","r"],[["t2"],"bL1","r"],[["t3"],"bL1","r"],
+    [["t4"],"bL2","r"],[["t5"],"bL2","r"],[["t6"],"bL3","r"],[["t7"],"bL3","r"],
+    [["bL0","bL1"],"cL0","r"],[["bL2","bL3"],"cL1","r"],[["cL0","cL1"],"fin","r"],
+    [["t8"],"bR0","l"],[["t9"],"bR0","l"],[["t10"],"bR1","l"],[["t11"],"bR1","l"],
+    [["t12"],"bR2","l"],[["t13"],"bR2","l"],[["t14"],"bR3","l"],[["t15"],"bR3","l"],
+    [["bR0","bR1"],"cR0","l"],[["bR2","bR3"],"cR1","l"],[["cR0","cR1"],"fin","l"]
+  ];
+  function rect(id,base){
+    var r=document.getElementById(id).getBoundingClientRect();
+    return {l:r.left-base.left,r:r.right-base.left,y:r.top-base.top+r.height/2};
+  }
+  function drawLines(){
+    var svg=$("#lines"); if(!svg) return;
+    var base=el.getBoundingClientRect(), out="";
+    LINKS.forEach(function(k){
+      var to=rect(k[1],base);
+      k[0].forEach(function(id){
+        var a=rect(id,base), x1,x2;
+        if(k[2]==="r"){x1=a.r;x2=to.l;}else{x1=a.l;x2=to.r;}
+        var mx=(x1+x2)/2;
+        out+='<path class="draw" pathLength="1" d="M'+x1+' '+a.y+'H'+mx+'V'+to.y+'H'+x2+'"/>';
+      });
+    });
+    svg.setAttribute("viewBox","0 0 "+base.width+" "+base.height);
+    svg.innerHTML=out;
+  }
+
+  render();
+  drawLines();
+  var rt; window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(drawLines,120);});
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(drawLines);
+
+  /* ---------- появление при прокрутке ---------- */
+  var items=document.querySelectorAll(".rv");
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});
+    },{threshold:.12});
+    items.forEach(function(n){io.observe(n);});
+    var bo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){el.classList.add("in");bo.disconnect();}});},{threshold:.15});
+    bo.observe(el);
+  } else {
+    items.forEach(function(n){n.classList.add("in");}); el.classList.add("in");
+  }
+  setTimeout(function(){items.forEach(function(n){n.classList.add("in");});el.classList.add("in");},1800);
+  $("#yr").textContent=new Date().getFullYear();
+
+  /* ---------- модальное окно ---------- */
+  var ov=$("#ov"), f=$("#f"), cur=null, lastFocus=null;
+  function open(team,slot){
+    cur={team:team,slot:slot};
+    lastFocus=document.activeElement;
+    $("#mm").textContent="Команда "+TEAMS[team].n+" · место "+slot+" из "+SIZE;
+    $("#formView").hidden=false; $("#doneView").hidden=true;
+    f.reset(); clearErrs();
+    ov.classList.add("open"); ov.setAttribute("aria-hidden","false");
+    document.body.style.overflow="hidden";
+    setTimeout(function(){$("#nick").focus();},200);
+  }
+  function close(){
+    ov.classList.remove("open"); ov.setAttribute("aria-hidden","true");
+    document.body.style.overflow="";
+    if(lastFocus&&lastFocus.focus) try{lastFocus.focus();}catch(e){}
+  }
+  function clearErrs(){
+    document.querySelectorAll("[data-e]").forEach(function(n){n.textContent="";});
+    $("#formErr").textContent="";
+    f.querySelectorAll("input").forEach(function(i){i.classList.remove("bad");});
+  }
+  function setErr(name,msg){
+    var i=f.elements[name]; if(i) i.classList.add("bad");
+    var e=document.querySelector('[data-e="'+name+'"]'); if(e) e.textContent=msg;
+  }
+  function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},3200);}
+
+  el.addEventListener("click",function(e){
+    var b=e.target.closest("button.slot.free"); if(!b) return;
+    open(+b.dataset.team,+b.dataset.slot);
+  });
+  $("#closeBtn").addEventListener("click",close);
+  $("#doneBtn").addEventListener("click",close);
+  ov.addEventListener("mousedown",function(e){if(e.target===ov)close();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&ov.classList.contains("open"))close();});
+
+  function validate(v){
+    clearErrs(); var ok=true;
+    if(v.nick.length<2||v.nick.length>24){setErr("nick","От 2 до 24 символов");ok=false;}
+    if(!/^\d{4,12}$/.test(v.gameId)){setErr("gameId","Только цифры, от 4 до 12");ok=false;}
+    if(!/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v.telegram)){setErr("telegram","Например, @username (от 5 символов, латиница)");ok=false;}
+    return ok;
+  }
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!cur) return;
+    var v={
+      nick:f.elements.nick.value.trim(),
+      gameId:f.elements.gameId.value.trim(),
+      telegram:f.elements.telegram.value.trim().replace(/^@+/,""),
+      website:f.elements.website.value
+    };
+    if(!validate(v)) return;
+    var btn=$("#sendBtn"); btn.disabled=true; btn.textContent="Отправляем…";
+    var payload={team:TEAMS[cur.team].n,seed:cur.team+1,slot:cur.slot,nick:v.nick,gameId:v.gameId,telegram:v.telegram,website:v.website};
+    fetch(SUBMIT_URL,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().catch(function(){return {ok:false};});})
+      .then(function(j){
+        if(!j||!j.ok) throw new Error("fail");
+        sent.push(key(cur.team,cur.slot)); saveSent(sent);
+        render(); drawLines(); el.classList.add("in");
+        $("#formView").hidden=true; $("#doneView").hidden=false;
+      })
+      .catch(function(){
+        $("#formErr").textContent="Не удалось отправить. Проверьте интернет и попробуйте ещё раз.";
+      })
+      .then(function(){btn.disabled=false;btn.textContent="Отправить заявку";});
+  });
+})();
+</script>
+</body>
+</html>
